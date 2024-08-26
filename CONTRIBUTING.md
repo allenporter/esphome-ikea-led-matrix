@@ -11,5 +11,5 @@ $ pip3 install -r requirements.txt
 ## Testing configurations
 
 ```bash
-$ esphome compile tests/example.yaml 
+$ esphome compile tests/frekvens.yaml 
 ```
