@@ -1,0 +1,27 @@
+# Test that exercises the frekvens component
+
+esphome:
+  name: frekvens
+  platform: ESP32
+  board: esp32-c3-devkitm-1
+  platformio_options:
+    lib_deps:
+      - Wire                            # Also required by GFX.
+      - SPI                             # Also required by GFX.
+      - adafruit/Adafruit BusIO         # Required by GFX Library.
+      - adafruit/Adafruit GFX Library   # Required for FrekvensPanel.
+      - me-no-dev/ESPAsyncTCP
+
+external_components:
+  - source:
+      type: local
+      path: ../components/
+    components: [ frekvens_panel ]
+
+display:
+  - platform: frekvens_panel
+    id: panel
+    latch_pin: 03
+    clock_pin: 04
+    data_pin: 05
+    lambda: ""

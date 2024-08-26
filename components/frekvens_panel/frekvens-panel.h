@@ -9,8 +9,7 @@
 namespace esphome {
 namespace frekvenspanel {
 
-class Panel : public PollingComponent,
-                public display::DisplayBuffer {
+class Panel : public display::DisplayBuffer {
  public:
   int p_latch;
   int p_clock;
