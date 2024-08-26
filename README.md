@@ -1,7 +1,6 @@
-# ESPHome IKEA LED matrix components for Frekvens
+# ESPHome component for IKEA Frekvens LED matrix 
 
-
-Frekvens is 16 by 16 LED Matrixes from IKEA and they are Hackable for Usage with HomeAssistant / ESPHome.
+Frekvens is 16 by 16 LED Matrixes from IKEA and they are [Hackable](https://spritesmods.com/?art=frekvens) for Usage with HomeAssistant / ESPHome.
 
 This Repository is a custom component for ESPHome to interface these Matrixes. This is a
 fork of upstream repositories, fixed for newer versions of ESPHome.
