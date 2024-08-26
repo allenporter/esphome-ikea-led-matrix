@@ -6,9 +6,6 @@ on:
   pull_request:
     branches: [ main ]
 
-env:
-  PYTHON_VERSION: 3.11
-
 jobs:
   build:
 
@@ -16,10 +13,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Set up Python ${{ PYTHON_VERSION }}
+    - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: "${{ PYTHON_VERSION }}"
+        python-version: "3.11"
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
