@@ -24,7 +24,6 @@ esphome:
       - SPI                             # Also required by GFX.
       - adafruit/Adafruit BusIO         # Required by GFX Library.
       - adafruit/Adafruit GFX Library   # Required for FrekvensPanel.
-      - me-no-dev/ESPAsyncTCP
 
 external_components:
   - source:
