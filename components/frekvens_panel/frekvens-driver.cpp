@@ -4,10 +4,40 @@
 
 #include "frekvens-driver.h"
 
+#ifdef USE_ESP_IDF
+#include <driver/gpio.h>
+#include "esphome/core/hal.h"
+
+namespace {
+inline void pin_mode_output(uint16_t pin) {
+    gpio_reset_pin(static_cast<gpio_num_t>(pin));
+    gpio_set_direction(static_cast<gpio_num_t>(pin), GPIO_MODE_OUTPUT);
+}
+inline void digital_write(uint16_t pin, uint32_t level) {
+    gpio_set_level(static_cast<gpio_num_t>(pin), level);
+}
+inline void delay_us(uint32_t us) {
+    esphome::delayMicroseconds(us);
+}
+}  // namespace
+#else
+namespace {
+inline void pin_mode_output(uint16_t pin) {
+    pinMode(pin, OUTPUT);
+}
+inline void digital_write(uint16_t pin, uint32_t level) {
+    digitalWrite(pin, level ? HIGH : LOW);
+}
+inline void delay_us(uint32_t us) {
+    delayMicroseconds(us);
+}
+}  // namespace
+#endif
+
 void init(int p_latch, int p_clock, int p_data, int p_enable);
 
 FrekvensPanel::FrekvensPanel(int p_latch, int p_clock, int p_data, int bitDepth,
-                             int numPanels) : Adafruit_GFX(16, numPanels * 16)
+                             int numPanels)
 {
     init(p_latch, p_clock, p_data, bitDepth, numPanels);
 }
@@ -20,9 +50,9 @@ void FrekvensPanel::init(int p_latch, int p_clock, int p_data, int bitDepth, int
     _pLatch = p_latch;
     _pClock = p_clock;
     _pData = p_data;
-    pinMode(_pLatch, OUTPUT);
-    pinMode(_pClock, OUTPUT);
-    pinMode(_pData, OUTPUT);
+    pin_mode_output(_pLatch);
+    pin_mode_output(_pClock);
+    pin_mode_output(_pData);
     _bitDepth = bitDepth;
     _numPages = (1 << bitDepth);
     _pageMask = _numPages - 1;
@@ -82,16 +112,16 @@ void FrekvensPanel::scan()
             unsigned short w = *p++;
             for (int j=0;j<16;j++)
             {
-                digitalWrite(_pData, w & 0x01);
+                digital_write(_pData, w & 0x01);
                 w >>= 1;
-                digitalWrite(_pClock, HIGH);
-                delayMicroseconds(1);
-                digitalWrite(_pClock, LOW);
+                digital_write(_pClock, 1);
+                delay_us(1);
+                digital_write(_pClock, 0);
             }
         }
-        digitalWrite(_pLatch,HIGH);
-        delayMicroseconds(1);
-        digitalWrite(_pLatch,LOW);
+        digital_write(_pLatch, 1);
+        delay_us(1);
+        digital_write(_pLatch, 0);
     }
     else
     {
@@ -102,16 +132,16 @@ void FrekvensPanel::scan()
             unsigned short w = *p++;
             for (int j=0;j<16;j++)
             {
-                digitalWrite(_pData, w & 0x01);
+                digital_write(_pData, w & 0x01);
                 w >>= 1;
-                digitalWrite(_pClock, HIGH);
-                delayMicroseconds(1);
-                digitalWrite(_pClock, LOW);
+                digital_write(_pClock, 1);
+                delay_us(1);
+                digital_write(_pClock, 0);
             }
         }
-        digitalWrite(_pLatch,HIGH);
-        delayMicroseconds(1);
-        digitalWrite(_pLatch,LOW);
+        digital_write(_pLatch, 1);
+        delay_us(1);
+        digital_write(_pLatch, 0);
         _activePage++;
         _activePage %= _numPages;
     }
@@ -127,7 +157,7 @@ unsigned short FrekvensPanel::height()
     return this->_height;
 }
 
-boolean FrekvensPanel::getPixel(int16_t x, int16_t y)
+bool FrekvensPanel::getPixel(int16_t x, int16_t y)
 {
     if (x > 7) { y += 0x10; x &= 0x07; }
     unsigned short address = (x + (y << 3)) & _addressMask;
