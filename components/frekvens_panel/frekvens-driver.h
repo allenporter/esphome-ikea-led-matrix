@@ -5,10 +5,14 @@
 #ifndef __FREKVENSPANEL_H
 #define __FREKVENSPANEL_H
 
+#ifdef USE_ESP_IDF
+#include <cstdint>
+#include <cstdlib>
+#else
 #include <Arduino.h>
-#include <Adafruit_GFX.h>
+#endif
 
-class FrekvensPanel : public Adafruit_GFX
+class FrekvensPanel
 {
 private:
     unsigned short _numPanels : 4;
@@ -37,15 +41,15 @@ public:
     void scan();
     void writeDeepPixel(unsigned short x, unsigned short y, unsigned short value);
 
-    boolean getPixel(int16_t x, int16_t y);
+    bool getPixel(int16_t x, int16_t y);
 
     unsigned short width();
     unsigned short height();
 
-    void drawPixel(int16_t x, int16_t y, uint16_t color) override;
-    void drawFastVLine(int16_t x, int16_t y, int16_t h, uint16_t color) override;
-    void drawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color) override;
-    void fillScreen(uint16_t color) override;
+    void drawPixel(int16_t x, int16_t y, uint16_t color);
+    void drawFastVLine(int16_t x, int16_t y, int16_t h, uint16_t color);
+    void drawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color);
+    void fillScreen(uint16_t color);
 
 private:
 

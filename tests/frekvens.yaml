@@ -2,12 +2,6 @@
 
 esphome:
   name: frekvens
-  platformio_options:
-    lib_deps:
-      - Wire                            # Also required by GFX.
-      - SPI                             # Also required by GFX.
-      - adafruit/Adafruit BusIO         # Required by GFX Library.
-      - adafruit/Adafruit GFX Library   # Required for FrekvensPanel.
 
 esp32:
   board: esp32-c3-devkitm-1
